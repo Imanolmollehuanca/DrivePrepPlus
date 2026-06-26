@@ -1,0 +1,511 @@
+/* ============================================================
+   DrivePrep+ — Global Styles
+   Estructura:
+   1. Tailwind Directives
+   2. CSS Variables (Design Tokens)
+   3. Reset & Base
+   4. Typography
+   5. Scrollbar
+   6. Animaciones
+   7. Utilidades personalizadas
+   ============================================================ */
+
+/* ── 1. Tailwind Directives ── */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── 2. CSS Variables (Design Tokens) ── */
+:root {
+  /* Colores principales */
+  --color-primary:       #4f46e5;
+  --color-primary-light: #818cf8;
+  --color-primary-dark:  #3730a3;
+
+  /* Colores de acento */
+  --color-accent:        #10b981;
+  --color-accent-light:  #34d399;
+
+  /* Estados */
+  --color-danger:        #ef4444;
+  --color-warning:       #f59e0b;
+  --color-success:       #10b981;
+
+  /* Sidebar */
+  --color-sidebar-bg:    #0f172a;
+  --color-sidebar-text:  #94a3b8;
+  --color-sidebar-active:#4f46e5;
+
+  /* Superficie */
+  --color-bg:            #f8fafc;
+  --color-card:          #ffffff;
+  --color-border:        #e2e8f0;
+
+  /* Texto */
+  --color-text-primary:  #0f172a;
+  --color-text-secondary:#64748b;
+  --color-text-muted:    #94a3b8;
+
+  /* Sombras */
+  --shadow-card:         0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-card-hover:   0 4px 12px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-sidebar:      4px 0 24px rgba(0,0,0,0.15);
+
+  /* Radios */
+  --radius-sm:   0.5rem;
+  --radius-md:   0.75rem;
+  --radius-lg:   1rem;
+  --radius-xl:   1.25rem;
+  --radius-full: 9999px;
+
+  /* Tipografía */
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  /* Transiciones */
+  --transition-fast:   150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow:   400ms ease;
+
+  /* Layout */
+  --sidebar-width:         240px;
+  --sidebar-width-mobile:  280px;
+  --topbar-height:         64px;
+}
+
+/* ── 2b. Dark Mode Variables ── */
+html.dark {
+  --color-primary:       #818cf8;
+  --color-primary-light: #a5b4fc;
+  --color-primary-dark:  #6366f1;
+
+  --color-accent:        #34d399;
+  --color-accent-light:  #6ee7b7;
+
+  --color-danger:        #f87171;
+  --color-warning:       #fbbf24;
+  --color-success:       #34d399;
+
+  /* Sidebar: se mantiene oscuro, solo ajustes leves */
+  --color-sidebar-bg:    #0a0f1e;
+  --color-sidebar-text:  #94a3b8;
+  --color-sidebar-active:#818cf8;
+
+  /* Superficie */
+  --color-bg:            #0f172a;
+  --color-card:          #1e293b;
+  --color-border:        #334155;
+
+  /* Texto */
+  --color-text-primary:  #f1f5f9;
+  --color-text-secondary:#94a3b8;
+  --color-text-muted:    #64748b;
+
+  /* Sombras */
+  --shadow-card:         0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.25);
+  --shadow-card-hover:   0 4px 12px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.35);
+  --shadow-sidebar:      4px 0 24px rgba(0,0,0,0.4);
+
+  color-scheme: dark;
+}
+
+/* Dark mode — overrides de clases Tailwind que usan colores fijos */
+html.dark .card {
+  background: var(--color-card);
+  border-color: var(--color-border);
+}
+html.dark .form-input {
+  background: #1e293b;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+html.dark .form-input::placeholder {
+  color: var(--color-text-muted);
+}
+html.dark .btn-secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+html.dark .badge-success { background: #052e16; color: #86efac; }
+html.dark .badge-danger  { background: #450a0a; color: #fca5a5; }
+html.dark .badge-warning { background: #431407; color: #fcd34d; }
+html.dark .badge-primary { background: #1e1b4b; color: #a5b4fc; }
+html.dark input[type="checkbox"] { accent-color: var(--color-primary); }
+
+/* ── 3. Reset & Base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+/* ── 4. Tipografía ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+/* ── 5. Scrollbar personalizado ── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ── 6. Animaciones ── */
+
+/* Fade-in desde abajo (entrada de cards y secciones) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-in simple */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Pulso suave para badges activos */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
+
+/* Entrada del sidebar en mobile */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+/* Rotación del spinner de carga */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Progreso de barra */
+@keyframes progressFill {
+  from { width: 0%; }
+  to   { width: var(--progress-value, 0%); }
+}
+
+/* ── 7. Utilidades personalizadas ── */
+
+/* Contenedor de la aplicación (layout principal) */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Área de contenido principal */
+.main-content {
+  flex: 1;
+  margin-left: var(--sidebar-width);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left var(--transition-normal);
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+}
+
+/* Card base */
+.card {
+  background: var(--color-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border);
+  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Entrada animada para cards del dashboard */
+.card-animated {
+  animation: fadeInUp 0.4s ease both;
+}
+
+.card-animated:nth-child(1) { animation-delay: 0ms; }
+.card-animated:nth-child(2) { animation-delay: 60ms; }
+.card-animated:nth-child(3) { animation-delay: 120ms; }
+.card-animated:nth-child(4) { animation-delay: 180ms; }
+.card-animated:nth-child(5) { animation-delay: 240ms; }
+.card-animated:nth-child(6) { animation-delay: 300ms; }
+
+/* Botón principal */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  white-space: nowrap;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+/* Botón secundario (outline) */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--color-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-primary);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+/* Badge de estado */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: var(--font-display);
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.badge-danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.badge-primary {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+/* Input de formulario */
+.form-input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-primary);
+  background: #fff;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* Label de formulario */
+.form-label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 0.4rem;
+}
+
+/* Barra de progreso */
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  animation: progressFill 0.8s ease-out both;
+  transition: width 0.6s ease;
+}
+
+/* Spinner de carga */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+/* Overlay para sidebar en mobile */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 40;
+  animation: fadeIn 0.2s ease;
+}
+
+/* Texto de sección (heading del dashboard) */
+.section-title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 1rem;
+}
+
+/* Link de acción */
+.link-action {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.link-action:hover {
+  color: var(--color-primary-dark);
+  text-decoration: underline;
+}
+
+/* Stat number */
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+/* Page fade-in */
+.page-enter {
+  animation: fadeInUp 0.35s ease both;
+}
+
+@keyframes scanline {
+  0%   { background-position: -100% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes ping-slow {
+  0%   { transform: scale(1);   opacity: 1; }
+  75%, 100% { transform: scale(2.5); opacity: 0; }
+}
+
+
+/* ── Dark mode extras ── */
+html.dark .bg-gray-50 { background-color: #1e293b !important; }
+html.dark .bg-gray-100 { background-color: #1e293b !important; }
+html.dark .hover\:bg-gray-50:hover { background-color: #1e293b !important; }
+html.dark .hover\:bg-gray-100:hover { background-color: #283348 !important; }
+html.dark select { background: #1e293b; color: var(--color-text-primary); border-color: var(--color-border); }
+html.dark .topbar-bg { background: rgba(15,23,42,0.92) !important; }
+html.dark .border-b { border-color: var(--color-border); }
