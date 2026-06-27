@@ -148,6 +148,7 @@ export function useSimulacro() {
       tiempoUsadoSegundos: usadoSeg,
       fecha: new Date().toLocaleDateString('es-PE', { day:'2-digit', month:'short', year:'numeric' }),
       hora:  new Date().toLocaleTimeString('es-PE', { hour:'2-digit', minute:'2-digit' }),
+      fechaTs: Date.now(), 
     };
 
     setResultado(res);
