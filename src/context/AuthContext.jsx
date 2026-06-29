@@ -11,6 +11,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { mockUser } from '../data/mockData';
 import { migrarDatosHuérfanos } from '../utils/storageUsuario';
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase/firebase";
 
 /* ── Contexto ── */
 const AuthContext = createContext(null);
@@ -200,7 +202,34 @@ export function AuthProvider({ children }) {
     return { datos: nuevaCuenta, esNuevo: true };
   };
 
-  const iniciarSesionConGoogle   = () => iniciarSesionConProveedor('google');
+  const iniciarSesionConGoogle = async () => {
+  const resultado = await signInWithPopup(auth, googleProvider);
+
+  const email = resultado.user.email;
+  const nombre = resultado.user.displayName;
+
+  const cuentas = leerCuentasLocales();
+
+  const existente = cuentas.find((c) => c.email === email);
+
+  if (existente) {
+    const { passwordHash, ...datosPublicos } = existente;
+    activarSesion(datosPublicos);
+    return { datos: datosPublicos, esNuevo: false };
+  }
+
+  const nuevaCuenta = crearPerfilNuevo({
+    id: Date.now(),
+    nombre,
+    email,
+    proveedor: "google",
+  });
+
+  guardarCuentaLocal(nuevaCuenta);
+  activarSesion(nuevaCuenta);
+
+  return { datos: nuevaCuenta, esNuevo: true };
+};
   const iniciarSesionConFacebook = () => iniciarSesionConProveedor('facebook');
 
   /* ── Recuperar contraseña (cuenta interna, sin correos reales) ──

@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Eye, EyeOff, Car, ArrowLeft, Lock, CheckCircle2, Mail } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import loginHero from '../assets/images/login-hero.png';
 
 const BENEFICIOS = [
   'Simulacros con preguntas tipo MTC actualizadas',
@@ -128,6 +129,11 @@ export default function RecuperarContrasenaPage() {
               </li>
             ))}
           </ul>
+        </div>
+        {/* imagen */}
+        <div
+        className="absolute inset-0"
+        style={{backgroundImage: `url(${loginHero})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>        
         </div>
 
         <div className="relative">

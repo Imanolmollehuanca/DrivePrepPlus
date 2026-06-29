@@ -20,7 +20,7 @@ const BENEFICIOS = [
 export default function LoginPage() {
   const navigate       = useNavigate();
   const location       = useLocation();
-  const { iniciarSesion, registrar } = useAuth();
+  const { iniciarSesion, registrar, iniciarSesionConGoogle } = useAuth();
   const esRegistro     = location.pathname === '/registro';
 
   /* ── Estado del formulario ── */
@@ -70,6 +70,17 @@ export default function LoginPage() {
       setErrorGeneral(err.message || (esRegistro ? 'Error al crear la cuenta.' : 'Error al iniciar sesión.'));
     } finally {
       setCargando(false);
+    }
+  };
+
+  /* FUNCIÓN ES NUEVA */
+  const handleGoogleLogin = async () => {
+    try {
+      await iniciarSesionConGoogle();
+      navigate('/dashboard');
+    } catch (error) {
+      console.error(error);
+      setErrorGeneral('No se pudo iniciar sesión con Google');
     }
   };
 
@@ -249,7 +260,7 @@ export default function LoginPage() {
               </div>
             )}
 
-            {/* Botón submit */}
+            {/* Botón submit  */}
             <button type="submit" disabled={cargando}
               className="btn-primary w-full justify-center text-base py-3 disabled:opacity-70 disabled:cursor-not-allowed">
               {cargando ? (
@@ -268,11 +279,11 @@ export default function LoginPage() {
               <div className="flex-1 h-px" style={{ background:'var(--color-border)' }} />
             </div>
 
-            {/* OAuth — solo Google, únicamente visual por ahora */}
-            <button type="button"
-              disabled
-              title="Disponible próximamente"
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-colors cursor-not-allowed opacity-90"
+            {/* OAuth — solo Google, únicamente visual por ahora cursor-not-allowed*/}
+            <button 
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-colors cursor-pointer hover:opacity-90"
               style={{ border:'1.5px solid var(--color-border)', background:'var(--color-card)', color:'var(--color-text-primary)', fontFamily:'var(--font-display)' }}>
               <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><path d="M47.532 24.552c0-1.636-.132-3.222-.396-4.756H24v9.01h13.2c-.576 3.06-2.28 5.652-4.824 7.392v6.156h7.8c4.548-4.2 7.356-10.38 7.356-17.802z" fill="#4285F4"/><path d="M24 48c6.6 0 12.132-2.184 16.176-5.916l-7.8-6.072c-2.148 1.44-4.896 2.292-8.376 2.292-6.444 0-11.904-4.356-13.86-10.2H2.052v6.24C6.072 42.624 14.436 48 24 48z" fill="#34A853"/><path d="M10.14 28.104A14.988 14.988 0 019.36 24c0-1.428.252-2.808.78-4.104v-6.24H2.052A23.952 23.952 0 000 24c0 3.876.924 7.548 2.052 10.344l8.088-6.24z" fill="#FBBC05"/><path d="M24 9.504c3.624 0 6.876 1.248 9.432 3.684l7.044-7.044C36.12 2.4 30.6 0 24 0 14.436 0 6.072 5.376 2.052 13.656l8.088 6.24C12.096 13.86 17.556 9.504 24 9.504z" fill="#EA4335"/></svg>
               Continuar con Google
