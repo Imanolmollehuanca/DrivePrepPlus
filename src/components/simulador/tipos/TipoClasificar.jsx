@@ -80,7 +80,7 @@ export default function TipoClasificar({ pregunta, respuesta = {}, onResponder }
         className="p-3 rounded-xl border-2 border-dashed transition-all duration-200"
         style={{
           borderColor: dragOverBanco ? '#6366f1' : 'var(--color-border)',
-          background:  dragOverBanco ? '#6366f105' : '#fafafa',
+          background:  dragOverBanco ? '#6366f105' : 'var(--color-card)',
           minHeight: '60px',
         }}
       >
@@ -98,7 +98,7 @@ export default function TipoClasificar({ pregunta, respuesta = {}, onResponder }
                          active:cursor-grabbing active:scale-95 transition-all duration-150 select-none"
               style={{
                 borderColor: dragging === item.id ? '#6366f1' : 'var(--color-border)',
-                background:  dragging === item.id ? '#6366f110' : '#fff',
+                background:  dragging === item.id ? '#6366f110' : 'var(--color-card)',
                 opacity:     dragging === item.id ? 0.6 : 1,
                 boxShadow:   'var(--shadow-card)',
               }}
@@ -161,7 +161,7 @@ export default function TipoClasificar({ pregunta, respuesta = {}, onResponder }
                     className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border cursor-grab
                                active:cursor-grabbing transition-all duration-150 select-none group"
                     style={{
-                      background: '#fff',
+                      background: 'var(--color-card)',
                       borderColor:`${cat.color}40`,
                       boxShadow: `0 1px 3px ${cat.color}15`,
                     }}

@@ -94,14 +94,14 @@ export default function TipoOrdenar({ pregunta, respuesta, onResponder }) {
                          transition-all duration-200 select-none"
               style={{
                 borderColor: isDragTarget ? '#6366f1' : 'var(--color-border)',
-                background:  isDragTarget ? '#6366f108' : '#fff',
+                background:  isDragTarget ? '#6366f108' : 'var(--color-card)',
                 transform:   isDragTarget ? 'scale(1.015)' : isAnimating ? 'scale(0.98)' : 'scale(1)',
                 boxShadow:   isDragTarget ? '0 4px 16px rgba(99,102,241,0.15)' : 'var(--shadow-card)',
               }}
             >
               {/* Número de posición */}
               <div className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-extrabold shrink-0"
-                   style={{ background:'#6366f115', color:'#6366f1', fontFamily:'var(--font-display)' }}>
+                   style={{ background:'var(--color-surface)', color:'#6366f1', fontFamily:'var(--font-display)' }}>
                 {idx + 1}
               </div>
 
@@ -121,12 +121,12 @@ export default function TipoOrdenar({ pregunta, respuesta, onResponder }) {
               {/* Botones arriba/abajo */}
               <div className="flex flex-col gap-0.5 shrink-0">
                 <button onClick={() => mover(idx, -1)} disabled={idx === 0}
-                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-gray-100
+                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--color-surface)]
                                    disabled:opacity-25 transition-colors">
                   <ArrowUp size={11} className="text-gray-500" />
                 </button>
                 <button onClick={() => mover(idx, 1)} disabled={idx === items.length - 1}
-                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-gray-100
+                        className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--color-surface)]
                                    disabled:opacity-25 transition-colors">
                   <ArrowDown size={11} className="text-gray-500" />
                 </button>

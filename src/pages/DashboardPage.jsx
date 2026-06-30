@@ -86,13 +86,13 @@ export default function DashboardPage() {
       : { texto: t('hist_desaprobado'), clase:'badge-danger'  }
     : null;
 
-  /* ── Recomendación ── */
+/* ── Recomendación ── */
   const categoriasMasErrores = entradas
     .filter((e) => e.porCategoria?.length)
     .flatMap((e) => e.porCategoria)
     .reduce((acc, c) => {
-      if (!acc[c.nombre]) acc[c.nombre] = { nombre:c.nombre, errores:0 };
-      acc[c.nombre].errores += (c.total - c.correctas);
+      if (!acc[c.label]) acc[c.label] = { nombre:c.label, errores:0 };
+      acc[c.label].errores += (c.total - c.correctas);
       return acc;
     }, {});
   const peorCategoria = Object.values(categoriasMasErrores).sort((a, b) => b.errores - a.errores)[0];
@@ -103,9 +103,9 @@ export default function DashboardPage() {
     .filter((e) => e.porCategoria?.length)
     .flatMap((e) => e.porCategoria)
     .reduce((acc, c) => {
-      if (!acc[c.nombre]) acc[c.nombre] = { nombre:c.nombre, correctas:0, total:0 };
-      acc[c.nombre].correctas += c.correctas;
-      acc[c.nombre].total     += c.total;
+      if (!acc[c.label]) acc[c.label] = { nombre:c.label, correctas:0, total:0 };
+      acc[c.label].correctas += c.correctas;
+      acc[c.label].total     += c.total;
       return acc;
     }, {});
   const categorias = Object.values(todasPorCategoria)

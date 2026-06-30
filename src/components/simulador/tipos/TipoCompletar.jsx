@@ -76,7 +76,7 @@ export default function TipoCompletar({ pregunta, respuesta = {}, onResponder })
 
       {/* Texto con huecos */}
       <div className="p-4 rounded-xl leading-loose text-sm"
-           style={{ background:'#f8fafc', border:'1px solid var(--color-border)', fontFamily:'var(--font-body)', color:'var(--color-text-primary)', lineHeight:'2.4' }}>
+           style={{ background:'var(--color-surface)', border:'1px solid var(--color-border)', fontFamily:'var(--font-body)', color:'var(--color-text-primary)', lineHeight:'2.4' }}>
         {partes.map((parte, i) => {
           if (parte.tipo === 'texto') return <span key={i}>{parte.valor}</span>;
 
@@ -96,7 +96,7 @@ export default function TipoCompletar({ pregunta, respuesta = {}, onResponder })
                 borderColor: estaLleno   ? '#8b5cf6'         :
                              puedeLlenar ? '#6366f1'         : '#cbd5e1',
                 background:  estaLleno   ? '#8b5cf610'       :
-                             puedeLlenar ? '#6366f108'       : '#f1f5f9',
+                             puedeLlenar ? '#6366f108'       : 'var(--color-surface)',
                 color:       estaLleno   ? '#7c3aed'         :
                              puedeLlenar ? '#6366f1'         : '#94a3b8',
                 transform:   puedeLlenar ? 'scale(1.05)' : 'scale(1)',
@@ -131,8 +131,8 @@ export default function TipoCompletar({ pregunta, respuesta = {}, onResponder })
                 style={{
                   borderColor: usada      ? '#e2e8f0' :
                                seleccion  ? '#8b5cf6' : '#cbd5e1',
-                  background:  usada      ? '#f8fafc'  :
-                               seleccion  ? '#8b5cf610': '#fff',
+                  background:  usada      ? 'var(--color-surface)'  :
+                               seleccion  ? '#8b5cf610': 'var(--color-surface)',
                   color:       usada      ? '#94a3b8'  :
                                seleccion  ? '#7c3aed'  : 'var(--color-text-primary)',
                   opacity:     usada ? 0.5 : 1,

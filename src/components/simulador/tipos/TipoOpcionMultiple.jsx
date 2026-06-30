@@ -35,14 +35,14 @@ export default function TipoOpcionMultiple({ pregunta, respuesta, onResponder })
                        transition-all duration-200 group relative overflow-hidden"
             style={{
               borderColor: seleccionada ? colorLetra : 'var(--color-border)',
-              background:  seleccionada ? `${colorLetra}0d` : '#fff',
+              background:  seleccionada ? `${colorLetra}0d` : 'var(--color-card)',
               transform:   esPulsando ? 'scale(0.985)' : 'scale(1)',
               boxShadow:   seleccionada ? `0 0 0 3px ${colorLetra}20` : 'none',
             }}
           >
             {/* Fondo animado al hover */}
             {!seleccionada && (
-              <div className="absolute inset-0 bg-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-150 rounded-xl" />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150 rounded-xl" style={{ background: 'var(--color-hover)' }}/>
             )}
 
             {/* Letra de opción */}

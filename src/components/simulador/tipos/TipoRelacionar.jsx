@@ -80,7 +80,7 @@ export default function TipoRelacionar({ pregunta, respuesta = {}, onResponder }
                   borderColor: activo     ? '#6366f1' :
                                conectado  ? '#10b981' : 'var(--color-border)',
                   background:  activo     ? '#6366f108' :
-                               conectado  ? '#10b98108' : '#fff',
+                               conectado  ? '#10b98108' : 'var(--color-card)',
                   boxShadow:   activo ? '0 0 0 3px #6366f120' : 'none',
                 }}
               >
@@ -124,7 +124,7 @@ export default function TipoRelacionar({ pregunta, respuesta = {}, onResponder }
                   borderColor: usado      ? '#10b981' :
                                disponible ? '#6366f1' : 'var(--color-border)',
                   background:  usado      ? '#10b98108' :
-                               disponible ? '#6366f105' : '#f8fafc',
+                               disponible ? '#6366f105' : 'var(--color-card)',
                   opacity: usado && !disponible ? 0.7 : 1,
                   cursor: usado ? 'default' : disponible ? 'pointer' : 'default',
                   transform: disponible ? 'scale(1.01)' : 'scale(1)',
@@ -154,7 +154,7 @@ export default function TipoRelacionar({ pregunta, respuesta = {}, onResponder }
             const der = pregunta.columnaDer.find((i) => i.id === derId);
             return (
               <div key={izqId} className="flex items-center gap-2 text-xs p-2 rounded-lg"
-                   style={{ background:'#10b98108', border:'1px solid #10b98130' }}>
+                   style={{ background:'var(--color-surface)', border:'1px solid #10b98130' }}>
                 <span className="font-semibold text-green-700 truncate" style={{ fontFamily:'var(--font-body)' }}>{izq?.texto}</span>
                 <span className="text-green-400 shrink-0">↔</span>
                 <span className="text-green-700 truncate" style={{ fontFamily:'var(--font-body)' }}>{der?.texto}</span>
