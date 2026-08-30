@@ -40,16 +40,16 @@ function VistaCategorias({ progresoCat, metricas, historial, onPracticar }) {
 
         {/* Encabezado */}
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-               style={{ background:'#6366f115' }}>
-            <BookOpen size={24} style={{ color:'#6366f1' }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center border"
+               style={{ background:'rgba(2,132,199,0.1)', borderColor:'rgba(2,132,199,0.2)' }}>
+            <BookOpen size={24} style={{ color:'#0284c7' }} />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold" style={{ fontFamily:'var(--font-display)' }}>
+            <h1 className="text-2xl font-extrabold" style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
               Práctica por temas
             </h1>
             <p className="text-sm" style={{ fontFamily:'var(--font-body)', color:'var(--color-text-secondary)' }}>
-              Elige una categoría para practicar y reforzar tus conocimientos.
+              Elige una categoría del Balotario MTC para practicar y reforzar tus conocimientos.
             </p>
           </div>
         </div>
@@ -66,106 +66,53 @@ function VistaCategorias({ progresoCat, metricas, historial, onPracticar }) {
           ))}
         </div>
 
-        {/* Banner de motivación */}
-        <div className="rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[auto_1fr] gap-0"
-            style={{ boxShadow: '0 10px 40px rgba(99,102,241,0.25)' }}>
+        {/* Banner de motivación MTC */}
+        <div className="rounded-2xl overflow-hidden grid grid-cols-1 md:grid-cols-[auto_1fr] gap-0 shadow-md border"
+             style={{ borderColor:'var(--color-border)' }}>
 
-          {/* Lado izquierdo — tech/futurista (versión robusta) */}
-          <div className="relative p-8 flex flex-col justify-center overflow-hidden"
+          {/* Lado izquierdo */}
+          <div className="relative p-7 flex flex-col justify-center overflow-hidden text-white"
               style={{
-                background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)',
+                background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
                 minWidth: '260px',
               }}>
 
-            {/* Grid pattern de fondo */}
-            <div className="absolute inset-0"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px)',
-                  backgroundSize: '24px 24px',
-                }} />
-
-            {/* Glow superior derecho — usando box-shadow en vez de blur para máxima compatibilidad */}
-            <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full"
-                style={{
-                  background: 'radial-gradient(circle, #8b5cf6 0%, transparent 70%)',
-                  opacity: 0.6,
-                }} />
-
-            {/* Glow inferior izquierdo */}
-            <div className="absolute -bottom-20 -left-16 w-52 h-52 rounded-full"
-                style={{
-                  background: 'radial-gradient(circle, #06b6d4 0%, transparent 70%)',
-                  opacity: 0.4,
-                }} />
-
-            {/* Línea de "scan" — bien visible, color brillante, animación CSS pura */}
-            <div className="absolute top-0 left-0 w-full h-[3px]"
-                style={{
-                  background: 'linear-gradient(90deg, transparent, #22d3ee 20%, #c084fc 50%, #22d3ee 80%, transparent)',
-                  backgroundSize: '200% 100%',
-                  animation: 'scanline 2.5s linear infinite',
-                }} />
-
-            {/* Punto pulsante de estado "online" */}
+            {/* Punto de estado */}
             <div className="relative z-10 flex items-center gap-2 mb-3">
-              <span className="relative flex items-center justify-center w-2 h-2">
-                <span className="absolute w-2 h-2 rounded-full bg-emerald-400" />
-                <span className="absolute w-2 h-2 rounded-full bg-emerald-400" style={{ animation: 'ping-slow 2s cubic-bezier(0,0,0.2,1) infinite' }} />
-              </span>
-              <span className="text-[10px] font-bold uppercase"
-                    style={{ color: '#a5b4fc', fontFamily: 'var(--font-display)', letterSpacing: '0.15em' }}>
-                DrivePrep+
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-[10px] font-bold uppercase tracking-wider text-sky-100"
+                    style={{ fontFamily: 'var(--font-display)' }}>
+                DrivePrep+ MTC
               </span>
             </div>
 
-            {/* Ícono con borde brillante */}
-            <div className="relative z-10 w-12 h-12 rounded-2xl flex items-center justify-center mb-4 border-2"
-                style={{
-                  background: 'rgba(129,140,248,0.2)',
-                  borderColor: '#a78bfa',
-                  boxShadow: '0 0 20px rgba(167,139,250,0.6)',
-                }}>
-              <Target size={22} color="#e0e7ff" />
-            </div>
-
-            {/* Título con degradado de texto */}
-            <h2 className="relative z-10 text-xl font-extrabold leading-tight"
-                style={{
-                  fontFamily: 'var(--font-display)',
-                  background: 'linear-gradient(90deg, #ffffff, #a5b4fc)',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  color: 'transparent',
-                }}>
+            {/* Título */}
+            <h2 className="relative z-10 text-xl font-extrabold leading-tight text-white"
+                style={{ fontFamily: 'var(--font-display)' }}>
               ¡Sigue practicando!
             </h2>
-            <p className="relative z-10 text-sm mt-1 max-w-[220px]"
-              style={{ color: '#c7d2fe', fontFamily: 'var(--font-body)' }}>
-              La práctica constante es la clave para aprobar tu examen teórico del MTC.
+            <p className="relative z-10 text-sm mt-1 max-w-[220px] text-sky-100/90"
+              style={{ fontFamily: 'var(--font-body)' }}>
+              La práctica constante es la clave para aprobar tu examen de manejo en el MTC.
             </p>
 
-            {/* Botón con gradiente animado */}
+            {/* Botón */}
             <button onClick={() => navigate('/simuladores')}
-                    className="relative z-10 mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white self-start transition-transform hover:scale-105"
-                    style={{
-                      fontFamily: 'var(--font-display)',
-                      background: 'linear-gradient(90deg, #6366f1, #a855f7, #06b6d4)',
-                      boxShadow: '0 4px 20px rgba(168,85,247,0.5)',
-                    }}>
+                    className="relative z-10 mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-sky-900 bg-white hover:bg-sky-50 transition-all shadow-md self-start cursor-pointer"
+                    style={{ fontFamily: 'var(--font-display)' }}>
               Iniciar simulador completo
               <ArrowRight size={16} />
             </button>
           </div>
 
           {/* Resumen de actividad */}
-          <div className="p-6" style={{ background: '#ffffff' }}>
-            <p className="text-sm font-bold mb-4" style={{ fontFamily:'var(--font-display)' }}>
+          <div className="p-6" style={{ background: 'var(--color-card)' }}>
+            <p className="text-sm font-bold mb-4" style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
               Resumen de tu actividad
             </p>
             <div className="grid grid-cols-2 gap-4">
               {[
-                { label:'Preguntas practicadas', v: met.totalRespondidas,   color:'#6366f1', emoji:'📝' },
+                { label:'Preguntas practicadas', v: met.totalRespondidas,   color:'#0284c7', emoji:'📝' },
                 { label:'Respuestas correctas',  v: met.totalCorrectas,     color:'#10b981', emoji:'✅' },
                 { label:'Promedio de aciertos',  v: `${met.promedioAciertos}%`, color:'#f59e0b', emoji:'🎯' },
                 { label:'Tiempo de práctica',    v: `${met.totalTiempoMin} min`, color:'#0ea5e9', emoji:'⏱️' },
@@ -178,8 +125,8 @@ function VistaCategorias({ progresoCat, metricas, historial, onPracticar }) {
               ))}
             </div>
             <button onClick={() => navigate('/estadisticas')}
-                    className="mt-4 text-xs font-semibold flex items-center gap-1"
-                    style={{ color:'#6366f1', fontFamily:'var(--font-display)' }}>
+                    className="mt-4 text-xs font-semibold flex items-center gap-1 hover:underline cursor-pointer"
+                    style={{ color:'#0284c7', fontFamily:'var(--font-display)' }}>
               Ver estadísticas detalladas <ArrowRight size={12} />
             </button>
           </div>

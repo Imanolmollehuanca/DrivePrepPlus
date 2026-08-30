@@ -11,7 +11,7 @@
 /* ── Categorías ── */
 export const CATEGORIAS = {
   senales:      { id:'senales',      label:'Señales de tránsito',     color:'#f59e0b', icon:'AlertTriangle' },
-  normas:       { id:'normas',       label:'Normas de circulación',   color:'#6366f1', icon:'BookOpen'      },
+  normas:       { id:'normas',       label:'Normas de circulación',   color:'#0284c7', icon:'BookOpen'      },
   infracciones: { id:'infracciones', label:'Infracciones y sanciones',color:'#ef4444', icon:'Gavel'         },
   seguridad:    { id:'seguridad',    label:'Seguridad vial',          color:'#10b981', icon:'Shield'        },
 };
