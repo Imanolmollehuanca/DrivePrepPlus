@@ -7,7 +7,7 @@
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react';
 
 /* ── StatCard: tarjeta de métrica numérica ── */
-export function StatCard({ titulo, valor, sufijo = '', icono: Icono, color = '#6366f1', tendencia }) {
+export function StatCard({ titulo, valor, sufijo = '', icono: Icono, color = '#0284c7', tendencia }) {
   const TendenciaIcono =
     tendencia === 'sube' ? TrendingUp :
     tendencia === 'baja' ? TrendingDown : Minus;
@@ -58,7 +58,7 @@ export function StatCard({ titulo, valor, sufijo = '', icono: Icono, color = '#6
 }
 
 /* ── ProgressRing: círculo de progreso SVG ── */
-export function ProgressRing({ porcentaje = 0, size = 100, stroke = 8, color = '#6366f1', children }) {
+export function ProgressRing({ porcentaje = 0, size = 100, stroke = 8, color = '#0284c7', children }) {
   const radio    = (size - stroke) / 2;
   const circunf  = 2 * Math.PI * radio;
   const dashoffset = circunf * (1 - (porcentaje || 0) / 100);
@@ -92,7 +92,7 @@ export function ProgressRing({ porcentaje = 0, size = 100, stroke = 8, color = '
 }
 
 /* ── ModuleCard: tarjeta de acceso a módulo ── */
-export function ModuleCard({ titulo, descripcion, icono: Icono, color = '#6366f1', onClick }) {
+export function ModuleCard({ titulo, descripcion, icono: Icono, color = '#0284c7', onClick }) {
   return (
     <button
       onClick={onClick}
@@ -153,7 +153,7 @@ export function CategoryBar({ nombre, porcentajeAcierto, color }) {
 }
 
 /* ── QuickAccessCard: acceso rápido (pequeña tarjeta icónica) ── */
-export function QuickAccessCard({ label, icono: Icono, color = '#6366f1', onClick }) {
+export function QuickAccessCard({ label, icono: Icono, color = '#0284c7', onClick }) {
   return (
     <button
       onClick={onClick}
