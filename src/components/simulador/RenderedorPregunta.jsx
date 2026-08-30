@@ -156,8 +156,8 @@ export default function RenderedorPregunta({
 
         <button onClick={onSiguiente} disabled={indice === total-1}
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold
-                           bg-indigo-50 text-indigo-600 border border-indigo-200
-                           hover:bg-indigo-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                           bg-sky-50 dark:bg-sky-950/40 text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800
+                           hover:bg-sky-100 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 style={{ fontFamily:'var(--font-display)' }}>
           Siguiente →
         </button>
