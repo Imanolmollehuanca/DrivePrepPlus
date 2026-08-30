@@ -323,12 +323,12 @@ export default function PerfilPage() {
 
       {/* ── Encabezado de página ── */}
       <div className="flex items-center gap-4">
-        <div className="w-12 h-12 rounded-xl flex items-center justify-center"
-             style={{ background:'#eef2ff' }}>
-          <User size={24} style={{ color:'#6366f1' }} />
+        <div className="w-12 h-12 rounded-xl flex items-center justify-center border"
+             style={{ background:'rgba(2,132,199,0.1)', borderColor:'rgba(2,132,199,0.2)' }}>
+          <User size={24} style={{ color:'#0284c7' }} />
         </div>
         <div>
-          <h1 className="text-2xl font-extrabold" style={{ fontFamily:'var(--font-display)' }}>
+          <h1 className="text-2xl font-extrabold" style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
             Mi perfil
           </h1>
           <p className="text-sm" style={{ fontFamily:'var(--font-body)', color:'var(--color-text-secondary)' }}>
@@ -345,7 +345,7 @@ export default function PerfilPage() {
 
           {/* ── INFORMACIÓN PERSONAL ── */}
           <div className="card p-6">
-            <h2 className="text-base font-bold mb-5" style={{ fontFamily:'var(--font-display)' }}>
+            <h2 className="text-base font-bold mb-5" style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
               Información personal
             </h2>
 
@@ -355,13 +355,13 @@ export default function PerfilPage() {
                 <Avatar nombre={datosUsuario.nombre} size="xl" />
                 <p className="text-xs text-center"
                    style={{ fontFamily:'var(--font-body)', color:'var(--color-text-muted)', maxWidth:'100px' }}>
-                  Las fotos de perfil estarán disponibles en la Fase 4.
+                  Tu foto de perfil MTC
                 </p>
               </div>
 
               {/* Campos */}
               <div className="flex-1 space-y-0">
-                <FilaInfo icono={User} label="Nombre completo" color="#6366f1">
+                <FilaInfo icono={User} label="Nombre completo" color="#0284c7">
                   <CampoEditable
                     valor={datosUsuario.nombre}
                     placeholder="Tu nombre completo"
@@ -381,16 +381,18 @@ export default function PerfilPage() {
 
                 <FilaInfo icono={Shield} label="Método de inicio de sesión" color={
                   datosUsuario.proveedor === 'google'   ? '#ea4335' :
-                  datosUsuario.proveedor === 'facebook' ? '#1877f2' : '#6366f1'
+                  datosUsuario.proveedor === 'facebook' ? '#1877f2' : '#0284c7'
                 }>
                   <span
-                    className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border"
                     style={{
                       fontFamily: 'var(--font-display)',
                       background: datosUsuario.proveedor === 'google'   ? '#fee2e2' :
-                                  datosUsuario.proveedor === 'facebook' ? '#dbeafe' : '#eef2ff',
+                                  datosUsuario.proveedor === 'facebook' ? '#dbeafe' : 'rgba(2,132,199,0.1)',
                       color:      datosUsuario.proveedor === 'google'   ? '#ea4335' :
-                                  datosUsuario.proveedor === 'facebook' ? '#1877f2' : '#4338ca',
+                                  datosUsuario.proveedor === 'facebook' ? '#1877f2' : '#0284c7',
+                      borderColor: datosUsuario.proveedor === 'google'  ? '#fca5a5' :
+                                  datosUsuario.proveedor === 'facebook' ? '#93c5fd' : 'rgba(2,132,199,0.2)',
                     }}
                   >
                     {datosUsuario.proveedor === 'google'   && '🔴 Google'}
@@ -399,13 +401,14 @@ export default function PerfilPage() {
                   </span>
                 </FilaInfo>
 
-                <FilaInfo icono={CreditCard} label="Tipo de cuenta" color="#8b5cf6">
+                <FilaInfo icono={CreditCard} label="Tipo de cuenta" color="#10b981">
                   <div className="flex items-center gap-2">
                     <span
-                      className="text-xs font-bold px-3 py-1 rounded-full"
+                      className="text-xs font-bold px-3 py-1 rounded-full border"
                       style={{
-                        background: esPremium ? 'linear-gradient(90deg,#fef3c7,#fde68a)' : '#f1f5f9',
-                        color:      esPremium ? '#92400e' : '#64748b',
+                        background: esPremium ? 'linear-gradient(90deg,#fef3c7,#fde68a)' : 'var(--color-bg)',
+                        color:      esPremium ? '#92400e' : 'var(--color-text-secondary)',
+                        borderColor: esPremium ? '#fde047' : 'var(--color-border)',
                         fontFamily: 'var(--font-display)',
                       }}
                     >
@@ -414,8 +417,8 @@ export default function PerfilPage() {
                     {!esPremium && (
                       <button
                         onClick={() => navigate('/premium')}
-                        className="text-xs font-semibold flex items-center gap-0.5"
-                        style={{ color:'#6366f1', fontFamily:'var(--font-display)' }}
+                        className="text-xs font-semibold flex items-center gap-0.5 hover:underline cursor-pointer"
+                        style={{ color:'#0284c7', fontFamily:'var(--font-display)' }}
                       >
                         Mejorar <ChevronRight size={11} />
                       </button>
@@ -427,7 +430,7 @@ export default function PerfilPage() {
                   <FilaInfo icono={Calendar} label="Fecha de registro" color="#f59e0b">
                     <p className="text-sm font-semibold"
                        style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
-                      {datosUsuario.fechaRegistro}
+                      {formatearFecha(datosUsuario.fechaRegistro)}
                     </p>
                   </FilaInfo>
                 )}
