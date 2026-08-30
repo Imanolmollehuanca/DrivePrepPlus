@@ -17,10 +17,10 @@
 
 /* ── 2. CSS Variables (Design Tokens) ── */
 :root {
-  /* Colores principales */
-  --color-primary:       #4f46e5;
-  --color-primary-light: #818cf8;
-  --color-primary-dark:  #3730a3;
+  /* Colores principales - MTC Azul Sky & Slate */
+  --color-primary:       #0284c7;
+  --color-primary-light: #38bdf8;
+  --color-primary-dark:  #0369a1;
 
   /* Colores de acento */
   --color-accent:        #10b981;
@@ -34,7 +34,7 @@
   /* Sidebar */
   --color-sidebar-bg:    #0f172a;
   --color-sidebar-text:  #94a3b8;
-  --color-sidebar-active:#4f46e5;
+  --color-sidebar-active:#0284c7;
 
   /* Superficie */
   --color-bg:            #f8fafc;
@@ -43,13 +43,13 @@
 
   /* Texto */
   --color-text-primary:  #0f172a;
-  --color-text-secondary:#64748b;
+  --color-text-secondary:#475569;
   --color-text-muted:    #94a3b8;
 
   /* Sombras */
-  --shadow-card:         0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.06);
-  --shadow-card-hover:   0 4px 12px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08);
-  --shadow-sidebar:      4px 0 24px rgba(0,0,0,0.15);
+  --shadow-card:         0 1px 3px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.04);
+  --shadow-card-hover:   0 4px 12px rgba(15,23,42,0.08), 0 8px 24px rgba(15,23,42,0.06);
+  --shadow-sidebar:      4px 0 24px rgba(0,0,0,0.12);
 
   /* Radios */
   --radius-sm:   0.5rem;
@@ -75,9 +75,9 @@
 
 /* ── 2b. Dark Mode Variables ── */
 html.dark {
-  --color-primary:       #818cf8;
-  --color-primary-light: #a5b4fc;
-  --color-primary-dark:  #6366f1;
+  --color-primary:       #38bdf8;
+  --color-primary-light: #7dd3fc;
+  --color-primary-dark:  #0284c7;
 
   --color-accent:        #34d399;
   --color-accent-light:  #6ee7b7;
@@ -86,10 +86,10 @@ html.dark {
   --color-warning:       #fbbf24;
   --color-success:       #34d399;
 
-  /* Sidebar: se mantiene oscuro, solo ajustes leves */
-  --color-sidebar-bg:    #0a0f1e;
+  /* Sidebar */
+  --color-sidebar-bg:    #0a0f1d;
   --color-sidebar-text:  #94a3b8;
-  --color-sidebar-active:#818cf8;
+  --color-sidebar-active:#0284c7;
 
   /* Superficie */
   --color-bg:            #0f172a;
