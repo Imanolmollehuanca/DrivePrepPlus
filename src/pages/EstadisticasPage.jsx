@@ -27,7 +27,7 @@ const TooltipGrafico = ({ active, payload, label }) => {
     <div className="rounded-xl px-3 py-2.5 shadow-lg border text-sm"
          style={{ background:'var(--color-card)', borderColor:'var(--color-border)', fontFamily:'var(--font-display)' }}>
       <p className="text-xs mb-0.5" style={{ color:'var(--color-text-muted)' }}>{label}</p>
-      <p className="font-extrabold" style={{ color:'#6366f1' }}>{payload[0].value}%</p>
+      <p className="font-extrabold" style={{ color:'#0284c7' }}>{payload[0].value}%</p>
     </div>
   );
 };
@@ -133,11 +133,11 @@ export default function EstadisticasPage() {
       {/* ── Encabezado ── */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background:'#eef2ff' }}>
-            <BarChart2 size={24} style={{ color:'#6366f1' }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center border" style={{ background:'rgba(2,132,199,0.1)', borderColor:'rgba(2,132,199,0.2)' }}>
+            <BarChart2 size={24} style={{ color:'#0284c7' }} />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold" style={{ fontFamily:'var(--font-display)' }}>
+            <h1 className="text-2xl font-extrabold" style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
               Estadísticas
             </h1>
             <p className="text-sm" style={{ fontFamily:'var(--font-body)', color:'var(--color-text-secondary)' }}>

@@ -90,30 +90,28 @@ export default function LoginPage() {
       {/* ── Panel izquierdo (hero) ── */}
       <div
         className="hidden lg:flex lg:w-[55%] relative flex-col justify-between p-12 overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 70%, #4f46e5 100%)' }}
+        style={{ background: 'linear-gradient(135deg, #0f172a 0%, #0369a1 60%, #0284c7 100%)' }}
       >
         {/* imagen */}
         <div
-        className="absolute inset-0"
-        style={{backgroundImage: `url(${loginHero})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}>        
-        </div>
-        {/* oscuro */}
-        <div 
-        className="absolute inset-0"
-        style={{ background: 'linear-gradient(15,23,42,0.45), rgba(49,46,129,0.55))' }}></div>
-        
-        <div className="absolute inset-0 opacity-10"
-          style={{ backgroundImage: `radial-gradient(circle at 20% 20%, #818cf8 0%, transparent 50%), radial-gradient(circle at 80% 80%, #a5b4fc 0%, transparent 50%)` }}
+          className="absolute inset-0"
+          style={{backgroundImage: `url(${loginHero})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat'}}
         />
+        {/* oscuro overlay */}
+        <div 
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(180deg, rgba(15,23,42,0.85) 0%, rgba(3,105,161,0.85) 100%)' }}
+        />
+        
         <div className="relative z-10 flex items-center gap-3">
-          <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center backdrop-blur-sm">
+          <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/20">
             <Car size={22} className="text-white" />
           </div>
           <div>
             <span className="text-white font-extrabold text-xl" style={{ fontFamily:'var(--font-display)' }}>
-              DrivePrep<span className="text-indigo-300">+</span>
+              DrivePrep<span className="text-sky-300">+</span>
             </span>
-            <p className="text-indigo-300 text-xs" style={{ fontFamily:'var(--font-body)' }}>
+            <p className="text-sky-200 text-xs" style={{ fontFamily:'var(--font-body)' }}>
               Preparación Teórica MTC · Perú
             </p>
           </div>
@@ -121,33 +119,33 @@ export default function LoginPage() {
 
         <div className="relative z-10 space-y-6">
           <div className="space-y-3">
-            <p className="text-indigo-300 text-sm font-semibold tracking-widest uppercase" style={{ fontFamily:'var(--font-display)' }}>
-              Tu licencia de conducir te espera
+            <p className="text-sky-200 text-xs font-bold tracking-widest uppercase" style={{ fontFamily:'var(--font-display)' }}>
+              Tu Licencia de Conducir Clase A-I
             </p>
             <h1 className="text-4xl xl:text-5xl font-black text-white leading-tight" style={{ fontFamily:'var(--font-display)' }}>
               Aprobar tu examen<br />
-              <span className="text-transparent bg-clip-text" style={{ backgroundImage:'linear-gradient(90deg, #a5b4fc, #34d399)' }}>
+              <span className="text-transparent bg-clip-text" style={{ backgroundImage:'linear-gradient(90deg, #38bdf8, #34d399)' }}>
                 teórico del MTC
               </span><br />
               es posible.
             </h1>
-            <p className="text-indigo-200 text-base max-w-sm leading-relaxed" style={{ fontFamily:'var(--font-body)' }}>
-              Practica con simulacros reales, identifica tus errores y mejora tu rendimiento día a día.
+            <p className="text-sky-100 text-base max-w-sm leading-relaxed" style={{ fontFamily:'var(--font-body)' }}>
+              Practica con preguntas oficiales del balotario MTC, identifica tus errores y mide tu progreso en tiempo real.
             </p>
           </div>
           <ul className="space-y-3">
             {BENEFICIOS.map((item) => (
               <li key={item} className="flex items-start gap-3">
                 <CheckCircle2 size={18} className="text-emerald-400 mt-0.5 shrink-0" />
-                <span className="text-indigo-100 text-sm" style={{ fontFamily:'var(--font-body)' }}>{item}</span>
+                <span className="text-sky-100 text-sm font-medium" style={{ fontFamily:'var(--font-body)' }}>{item}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="relative">
-          <p className="text-indigo-400 text-xs" style={{ fontFamily:'var(--font-body)' }}>
-            © {new Date().getFullYear()} DrivePrep+. Basado en el Reglamento Nacional de Tránsito.
+        <div className="relative z-10">
+          <p className="text-sky-200/80 text-xs font-medium" style={{ fontFamily:'var(--font-body)' }}>
+            © {new Date().getFullYear()} DrivePrep+. Basado en el Reglamento Nacional de Tránsito de Perú.
           </p>
         </div>
       </div>

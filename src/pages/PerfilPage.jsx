@@ -39,9 +39,9 @@ function Avatar({ nombre, size = 'xl' }) {
     <div
       className={`${s.box} rounded-full flex items-center justify-center font-extrabold text-white select-none`}
       style={{
-        background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+        background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)',
         fontFamily: 'var(--font-display)',
-        boxShadow:  '0 4px 20px rgba(99,102,241,0.35)',
+        boxShadow:  '0 4px 20px rgba(2,132,199,0.35)',
       }}
     >
       <span className={s.text}>{iniciales}</span>

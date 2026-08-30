@@ -15,8 +15,8 @@ import { CATEGORIAS_PRACTICA }   from '../data/bancoPractica';
 
 /* ── Tarjeta de recomendación ── */
 function TarjetaRecomendacion({ icono: Ico, titulo, descripcion, accion, onAccion, color, prioridad }) {
-  const colorPrioridad = prioridad === 'alta' ? '#ef4444' : prioridad === 'media' ? '#f59e0b' : '#6366f1';
-  const bgPrioridad    = prioridad === 'alta' ? '#fee2e2' : prioridad === 'media' ? '#fef3c7' : '#eef2ff';
+  const colorPrioridad = prioridad === 'alta' ? '#ef4444' : prioridad === 'media' ? '#f59e0b' : '#0284c7';
+  const bgPrioridad    = prioridad === 'alta' ? '#fee2e2' : prioridad === 'media' ? '#fef3c7' : 'rgba(2,132,199,0.1)';
   const labelPrioridad = prioridad === 'alta' ? 'Prioritario' : prioridad === 'media' ? 'Recomendado' : 'Opcional';
 
   return (

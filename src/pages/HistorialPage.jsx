@@ -91,7 +91,7 @@ function PanelDetalle({ entrada, onCerrar }) {
           {[
             { label: 'Correctas',   v: entrada.correctas,   color: '#10b981', bg: '#d1fae5' },
             { label: 'Incorrectas', v: entrada.incorrectas, color: '#ef4444', bg: '#fee2e2' },
-            { label: 'Total',       v: entrada.total,        color: '#6366f1', bg: '#e0e7ff' },
+            { label: 'Total',       v: entrada.total,        color: '#0284c7', bg: 'rgba(2,132,199,0.1)' },
           ].map(({ label, v, color, bg }) => (
             <div key={label} className="text-center py-2.5 rounded-xl"
                  style={{ background: bg }}>

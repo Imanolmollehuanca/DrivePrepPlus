@@ -35,7 +35,7 @@ function persistirAjustes(datos) {
 }
 
 /* ── Toggle switch ── */
-function Toggle({ activo, onToggle, color = '#6366f1' }) {
+function Toggle({ activo, onToggle, color = '#0284c7' }) {
   return (
     <button onClick={onToggle}
       className="relative w-11 h-6 rounded-full transition-all duration-300 shrink-0 focus:outline-none"
@@ -48,11 +48,11 @@ function Toggle({ activo, onToggle, color = '#6366f1' }) {
 }
 
 /* ── Sección de ajustes ── */
-function SeccionAjustes({ icono: Ico, titulo, descripcion, color = '#6366f1', bg = '#eef2ff', children }) {
+function SeccionAjustes({ icono: Ico, titulo, descripcion, color = '#0284c7', bg = 'rgba(2,132,199,0.1)', children }) {
   return (
     <div className="card p-6 space-y-5">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ background: bg }}>
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border" style={{ background: bg, borderColor: 'rgba(2,132,199,0.2)' }}>
           <Ico size={20} style={{ color }} />
         </div>
         <div>
@@ -68,7 +68,7 @@ function SeccionAjustes({ icono: Ico, titulo, descripcion, color = '#6366f1', bg
 }
 
 /* ── Fila de acción (botón clicable) ── */
-function FilaAjuste({ icono: Ico, titulo, descripcion, color = '#6366f1', onClick }) {
+function FilaAjuste({ icono: Ico, titulo, descripcion, color = '#0284c7', onClick }) {
   return (
     <button
       onClick={onClick}
