@@ -50,14 +50,14 @@ export default function Sidebar({ abierto, onCerrar }) {
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-indigo-500/20 rounded-xl flex items-center justify-center">
-              <Car size={18} className="text-indigo-400" />
+            <div className="w-9 h-9 bg-sky-500/20 rounded-xl flex items-center justify-center border border-sky-500/30">
+              <Car size={18} className="text-sky-400" />
             </div>
             <div>
               <p className="text-white font-extrabold text-base leading-tight" style={{ fontFamily:'var(--font-display)' }}>
-                DrivePrep<span className="text-indigo-400">+</span>
+                DrivePrep<span className="text-sky-400">+</span>
               </p>
-              <p className="text-[10px] text-slate-500" style={{ fontFamily:'var(--font-body)' }}>
+              <p className="text-[10px] text-slate-400" style={{ fontFamily:'var(--font-body)' }}>
                 Preparación MTC · Perú
               </p>
             </div>
@@ -74,13 +74,13 @@ export default function Sidebar({ abierto, onCerrar }) {
             <NavLink key={ruta} to={ruta} onClick={onCerrar}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 group
-                ${isActive ? 'bg-indigo-500/20 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}`
+                ${isActive ? 'bg-sky-500/20 text-white border border-sky-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}`
               }
               style={{ fontFamily:'var(--font-display)' }}
             >
               {({ isActive }) => (
                 <>
-                  <Icono size={17} className={isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'} />
+                  <Icono size={17} className={isActive ? 'text-sky-400' : 'text-slate-500 group-hover:text-slate-300'} />
                   <span className="truncate">{label}</span>
                 </>
               )}
@@ -99,7 +99,7 @@ export default function Sidebar({ abierto, onCerrar }) {
             </NavLink>
           ) : (
             <div className="mx-0 mb-2 p-3 rounded-xl space-y-2"
-                 style={{ background:'rgba(99,102,241,0.08)', border:'1px solid rgba(99,102,241,0.15)' }}>
+                 style={{ background:'rgba(2,132,199,0.1)', border:'1px solid rgba(2,132,199,0.2)' }}>
               {/* Simulacros */}
               <div className="space-y-1">
                 <div className="flex justify-between items-center">
@@ -112,7 +112,7 @@ export default function Sidebar({ abierto, onCerrar }) {
                 </div>
                 <div className="h-1 rounded-full bg-white/10">
                   <div className="h-1 rounded-full transition-all"
-                       style={{ width:`${(stats.simulacrosUsados/stats.limiteSimulacros)*100}%`, background:'#818cf8' }} />
+                       style={{ width:`${(stats.simulacrosUsados/stats.limiteSimulacros)*100}%`, background:'#38bdf8' }} />
                 </div>
               </div>
               {/* Prácticas */}
@@ -145,12 +145,12 @@ export default function Sidebar({ abierto, onCerrar }) {
             <NavLink key={ruta} to={ruta} onClick={onCerrar}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group
-                ${isActive ? 'bg-indigo-500/20 text-white' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}`
+                ${isActive ? 'bg-sky-500/20 text-white border border-sky-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'}`
               }
               style={{ fontFamily:'var(--font-display)' }}>
               {({ isActive }) => (
                 <>
-                  <Icono size={17} className={isActive ? 'text-indigo-400' : 'text-slate-500 group-hover:text-slate-300'} />
+                  <Icono size={17} className={isActive ? 'text-sky-400' : 'text-slate-500 group-hover:text-slate-300'} />
                   <span className="truncate">{label}</span>
                 </>
               )}
@@ -162,7 +162,7 @@ export default function Sidebar({ abierto, onCerrar }) {
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 font-bold text-white text-sm"
-                 style={{ background:'linear-gradient(135deg,#6366f1,#8b5cf6)', fontFamily:'var(--font-display)' }}>
+                 style={{ background:'linear-gradient(135deg,#0284c7,#0369a1)', fontFamily:'var(--font-display)' }}>
               {inicialNombre}
             </div>
             <div className="flex-1 min-w-0">
