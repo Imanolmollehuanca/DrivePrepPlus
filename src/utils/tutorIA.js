@@ -1,10 +1,12 @@
 /* ============================================================
    DrivePrep+ — Motor del Asistente Educativo MTC (Perú)
    Motor de coincidencia de intenciones, contexto y banco de conocimientos
+   con soporte híbrido para IA Generativa (Google Gemini 1.5/2.0)
    ============================================================ */
 
 import { BASE_CONOCIMIENTOS_MTC, TEMAS_FUERA_DOMINIO } from '../data/chatbot/mtcKnowledge.js';
 import { BANCO_PREGUNTAS } from '../data/bancoPreguntasMTC.js';
+import { consultarGeminiMTC, getApiKeyGemini } from '../services/aiService.js';
 
 /* ── Sugerencias categorizadas para el chat ── */
 export const SUGERENCIAS_TUTOR = [
@@ -119,9 +121,64 @@ function buscarEnBaseConocimientos(textoNormalizado, ultimoTema) {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   MOTOR PRINCIPAL DE RESPUESTAS DEL ASISTENTE MTC
+   MOTOR PRINCIPAL HÍBRIDO (GEMINI IA + FALLBACK LOCAL MTC)
    ══════════════════════════════════════════════════════════════ */
 
+export async function responderTutorIAPrompt({
+  mensajeUsuario,
+  chatMensajes = [],
+  contextoConversacion = {},
+  datosUsuario = {},
+  historialSimulacros = [],
+  progresoPractica = {},
+  metricasHistorial = {},
+  catDebil = ''
+}) {
+  const apiKey = getApiKeyGemini();
+
+  // Si hay clave configurada, intentar respuesta con IA Gemini Generativa
+  if (apiKey) {
+    try {
+      const resGemini = await consultarGeminiMTC({
+        mensajeUsuario,
+        contextoConversacion: chatMensajes,
+        datosUsuario,
+        metricas: metricasHistorial,
+        catDebil
+      });
+
+      if (resGemini && resGemini.texto) {
+        return {
+          texto: resGemini.texto,
+          preguntaData: null,
+          nuevoContexto: { ...contextoConversacion, ultimoTema: 'gemini_ia' },
+          esIA: true,
+          proveedor: resGemini.proveedor
+        };
+      }
+    } catch (err) {
+      console.warn('[TutorIA] Fallo de Gemini API, activando fallback local MTC:', err?.message || err);
+    }
+  }
+
+  // Fallback determinista local si no hay API key o si falla la llamada
+  const resLocal = responderTutorIA({
+    mensajeUsuario,
+    contextoConversacion,
+    datosUsuario,
+    historialSimulacros,
+    progresoPractica,
+    metricasHistorial
+  });
+
+  return {
+    ...resLocal,
+    esIA: false,
+    proveedor: 'Motor Local MTC'
+  };
+}
+
+/* ── Motor Local Determinista Síncrono ── */
 export function responderTutorIA({
   mensajeUsuario,
   contextoConversacion = {},
@@ -159,7 +216,6 @@ export function responderTutorIA({
     if (opcionElegida && ['a', 'b', 'c', 'd'].includes(opcionElegida)) {
       const esCorrecta = opcionElegida === pActiva.correcta.toLowerCase();
       const opcionCorrectaObj = pActiva.opciones.find(o => o.id.toLowerCase() === pActiva.correcta.toLowerCase());
-      const opcionUsuarioObj = pActiva.opciones.find(o => o.id.toLowerCase() === opcionElegida);
 
       if (esCorrecta) {
         return {
@@ -206,7 +262,6 @@ export function responderTutorIA({
     textoNorm.includes('pregunta difícil');
 
   if (pidePregunta) {
-    // Identificar si pide un tema específico
     let categoriaTema = null;
     let kw = '';
     if (textoNorm.includes('senal') || textoNorm.includes('señal')) {
@@ -237,7 +292,6 @@ export function responderTutorIA({
   if (pideProgreso) {
     const totalSimulacros = metricasHistorial?.simulacrosRealizados || historialSimulacros.filter(e => e.tipo === 'simulacro_completo').length || 0;
     
-    // Si NO existen datos reales
     if (totalSimulacros === 0) {
       return {
         texto: `Para recomendarte un tema específico necesito revisar tus resultados. Mientras tanto, puedo ayudarte a practicar cualquier categoría del examen MTC.\n\n### 🚦 Recomendación inicial\nTe sugiero ingresar a la sección de **Simuladores** y rendir tu primer simulacro de diagnóstico. Una vez completado, podré indicarte con exactitud tus temas a reforzar.\n\n¿Quieres que practiquemos con una pregunta rápida ahora mismo?`,
@@ -246,7 +300,6 @@ export function responderTutorIA({
       };
     }
 
-    // Si existen datos reales
     const promedio = metricasHistorial?.promedioPuntaje || 0;
     const mapaCat = {};
     historialSimulacros.forEach(s => {
@@ -277,7 +330,6 @@ export function responderTutorIA({
 
   if (resultadoBusqueda && resultadoBusqueda.item) {
     const item = resultadoBusqueda.item;
-    // Seleccionar aleatoriamente una de las respuestas de la lista si hay varias
     const listaRespuestas = item.respuestas || [];
     const fnRespuesta = listaRespuestas[Math.floor(Math.random() * listaRespuestas.length)] || listaRespuestas[0];
     const textoRespuesta = typeof fnRespuesta === 'function' ? fnRespuesta(nombre) : fnRespuesta;
@@ -289,7 +341,7 @@ export function responderTutorIA({
     };
   }
 
-  /* ── 6. RESPUESTA DE ORIENTACIÓN GENERAL CUANDO NO HAY COINCIDENCIA EXACTA ── */
+  /* ── 6. RESPUESTA DE ORIENTACIÓN GENERAL ── */
   return {
     texto: `Comprendo tu consulta sobre el examen MTC${nombre ? `, ${nombre}` : ''}.\n\n### 🚦 Respuesta\nEn el Reglamento Nacional de Tránsito del Perú, cada situación se rige por la **jerarquía de las normas**, la **prioridad de paso** y la **conducción preventiva**.\n\nPuedes preguntarme puntualmente sobre:\n• **Señales:** Preventivas, reglamentarias o informativas.\n• **Cruce:** PARE, CEDA EL PASO u óvalos.\n• **Velocidades:** Límites en calles (30 km/h) y avenidas (50 km/h).\n• **Infracciones:** Faltas graves, muy graves y sistema de puntos.\n• **Mecánica:** Mantenimiento preventivo y testigos.\n\n¿Sobre cuál de estos temas te gustaría profundizar o quieres una pregunta de práctica?`,
     preguntaData: null,
