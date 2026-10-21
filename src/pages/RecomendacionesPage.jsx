@@ -1,7 +1,6 @@
 /* ============================================================
    DrivePrep+ — Tu Asistente Educativo MTC (Max)
    Asistente especializado en el Examen de Reglas de Tránsito
-   con soporte de IA Generativa (Google Gemini 1.5/2.0 Flash)
    ============================================================ */
 
 import { useState, useMemo, useRef, useEffect } from 'react';
@@ -9,16 +8,14 @@ import { useNavigate } from 'react-router-dom';
 import {
   Sparkles, Brain, Target, TrendingUp, TrendingDown,
   BookOpen, CheckCircle2, Clock, Lock, ArrowRight,
-  Send, Award, RefreshCw, Key, Zap, Compass, HelpCircle
+  Send, Award, RefreshCw, Zap, Compass, HelpCircle
 } from 'lucide-react';
 
 import { useAuth }              from '../context/AuthContext';
 import { useHistorial }         from '../hooks/useHistorial';
 import { usePractica }          from '../hooks/usePractica';
-import { responderTutorIAPrompt, SUGERENCIAS_TUTOR } from '../utils/tutorIA';
-import { getApiKeyGemini }     from '../services/aiService';
+import { responderTutorIA, SUGERENCIAS_TUTOR } from '../utils/tutorIA';
 import MensajeChat              from '../components/chat/MensajeChat';
-import ModalConfigIA            from '../components/chat/ModalConfigIA';
 import maxInstructorImg         from '../assets/images/max-instructor.jpg';
 
 export default function RecomendacionesPage() {
@@ -31,17 +28,9 @@ export default function RecomendacionesPage() {
   const [chatMensajes, setChatMensajes] = useState([]);
   const [estaEscribiendo, setEstaEscribiendo] = useState(false);
   const [contextoConversacion, setContextoConversacion] = useState({ ultimoTema: null, preguntaActiva: null });
-  const [modalConfigAbierto, setModalConfigAbierto] = useState(false);
-  const [tieneApiKey, setTieneApiKey] = useState(Boolean(getApiKeyGemini()));
-
   const chatEndRef = useRef(null);
 
   const nombreUsuario = usuario?.nombre ? usuario.nombre.split(' ')[0] : 'Futuro Conductor';
-
-  /* ── Actualizar indicador de API Key al volver de la modal ── */
-  const actualizarEstadoKey = () => {
-    setTieneApiKey(Boolean(getApiKeyGemini()));
-  };
 
   /* ── Análisis real de rendimiento ── */
   const analisis = useMemo(() => {
@@ -107,8 +96,8 @@ export default function RecomendacionesPage() {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMensajes, estaEscribiendo]);
 
-  /* ── Enviar consulta al Asistente (Soporta Gemini IA) ── */
-  const handleEnviarMensaje = async (textoPersonalizado) => {
+  /* ── Enviar consulta al Asistente ── */
+  const handleEnviarMensaje = (textoPersonalizado) => {
     const prompt = (textoPersonalizado || inputMensaje).trim();
     if (!prompt) return;
 
@@ -122,16 +111,14 @@ export default function RecomendacionesPage() {
     if (!textoPersonalizado) setInputMensaje('');
     setEstaEscribiendo(true);
 
-    try {
-      const respuesta = await responderTutorIAPrompt({
+    setTimeout(() => {
+      const respuesta = responderTutorIA({
         mensajeUsuario: prompt,
-        chatMensajes,
         contextoConversacion,
         datosUsuario: usuario,
         historialSimulacros: entradas,
         progresoPractica: progreso,
-        metricasHistorial: metricas,
-        catDebil: analisis.catDebilNombre
+        metricasHistorial: metricas
       });
 
       if (respuesta.nuevoContexto) {
@@ -144,16 +131,11 @@ export default function RecomendacionesPage() {
           id: Date.now() + 1,
           emisor: 'max',
           texto: respuesta.texto,
-          preguntaData: respuesta.preguntaData || null,
-          esIA: respuesta.esIA,
-          proveedor: respuesta.proveedor
+          preguntaData: respuesta.preguntaData || null
         }
       ]);
-    } catch (err) {
-      console.error('Error al responder en chat:', err);
-    } finally {
       setEstaEscribiendo(false);
-    }
+    }, 350);
   };
 
   const handleReiniciarChat = () => {
@@ -182,9 +164,8 @@ export default function RecomendacionesPage() {
               <h1 className="text-2xl font-extrabold font-display tracking-tight text-slate-900 dark:text-white leading-none">
                 Tu Asistente MTC
               </h1>
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 font-display flex items-center gap-1">
-                {tieneApiKey ? <Zap size={12} className="text-amber-400" /> : null}
-                Max · {tieneApiKey ? 'Gemini 1.5 IA ⚡' : 'Balotario MTC'}
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 font-display">
+                Max · Balotario MTC
               </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-body mt-1">
@@ -398,59 +379,37 @@ export default function RecomendacionesPage() {
           {/* Chat Interactivo con Max */}
           <div className="card border border-slate-200 dark:border-slate-800 shadow-xl rounded-2xl overflow-hidden flex flex-col h-[580px]">
             
-            {/* Header del Chat con Botón de Configurar IA */}
+            {/* Header del Chat */}
             <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/90 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-400 shrink-0 shadow-sm">
                     <img src={maxInstructorImg} alt="Max" className="w-full h-full object-cover object-top" />
                   </div>
-                  <span className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 ${
-                    tieneApiKey ? 'bg-amber-400 animate-pulse' : 'bg-emerald-400'
-                  }`} />
+                  <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-white dark:border-slate-900" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
                     <p className="text-sm font-bold font-display text-slate-900 dark:text-white leading-tight">
                       Max · Asistente MTC
                     </p>
-                    <span className={`px-1.5 py-0.2 rounded text-[10px] font-extrabold ${
-                      tieneApiKey
-                        ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
-                        : 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
-                    }`}>
-                      {tieneApiKey ? 'Gemini IA ⚡' : 'Balotario'}
+                    <span className="px-1.5 py-0.2 rounded text-[10px] font-extrabold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                      Balotario
                     </span>
                   </div>
                   <p className="text-[11px] text-emerald-500 font-semibold font-body flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    {tieneApiKey ? 'IA Generativa lista (1M tokens)' : 'Tutor interactivo activo'}
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Tutor interactivo activo
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setModalConfigAbierto(true)}
-                  className={`p-2 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
-                    tieneApiKey
-                      ? 'text-amber-500 bg-amber-500/10 hover:bg-amber-500/20'
-                      : 'text-slate-400 hover:text-indigo-500 hover:bg-slate-200 dark:hover:bg-slate-800'
-                  }`}
-                  title="Configurar IA (Google Gemini)"
-                >
-                  <Key size={15} />
-                  <span className="hidden sm:inline font-display">{tieneApiKey ? 'IA Activa' : 'Configurar IA'}</span>
-                </button>
-
-                <button
-                  onClick={handleReiniciarChat}
-                  className="p-2 text-slate-400 hover:text-indigo-500 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
-                  title="Reiniciar conversación"
-                >
-                  <RefreshCw size={16} />
-                </button>
-              </div>
+              <button
+                onClick={handleReiniciarChat}
+                className="p-2 text-slate-400 hover:text-indigo-500 rounded-xl hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
+                title="Reiniciar conversación"
+              >
+                <RefreshCw size={16} />
+              </button>
             </div>
 
             {/* Mensajes del Chat */}
@@ -465,15 +424,10 @@ export default function RecomendacionesPage() {
 
               {estaEscribiendo && (
                 <div className="flex justify-start">
-                  <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/90 rounded-tl-none border border-slate-200 dark:border-slate-700/60 flex items-center gap-2 shadow-2xs">
-                    <div className="flex items-center gap-1">
-                      <span className="w-2 h-2 rounded-full bg-indigo-500 animate-bounce" />
-                      <span className="w-2 h-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:0.2s]" />
-                      <span className="w-2 h-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:0.4s]" />
-                    </div>
-                    <span className="text-xs text-slate-400 font-body animate-pulse">
-                      {tieneApiKey ? 'Max consultando Gemini IA...' : 'Max analizando el MTC...'}
-                    </span>
+                  <div className="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800/90 rounded-tl-none border border-slate-200 dark:border-slate-700/60 flex items-center gap-1.5 shadow-2xs">
+                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-bounce" />
+                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:0.2s]" />
+                    <span className="w-2 h-2 rounded-full bg-indigo-500 animate-bounce [animation-delay:0.4s]" />
                   </div>
                 </div>
               )}
@@ -506,14 +460,14 @@ export default function RecomendacionesPage() {
                   type="text"
                   value={inputMensaje}
                   onChange={(e) => setInputMensaje(e.target.value)}
-                  placeholder={tieneApiKey ? "Pregúntale lo que quieras a Max (Gemini IA Activa ⚡)..." : "Pregúntale a Max sobre el balotario MTC, señales o práctica..."}
+                  placeholder="Pregúntale a Max sobre el balotario MTC, señales o práctica..."
                   className="w-full pl-9 pr-3 py-2.5 text-xs sm:text-[13px] rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-800 text-slate-900 dark:text-white outline-none transition-all font-body"
                 />
-                <Sparkles size={15} className={`absolute left-3 top-3 ${tieneApiKey ? 'text-amber-400' : 'text-indigo-500'}`} />
+                <Sparkles size={15} className="absolute left-3 top-3 text-indigo-500" />
               </div>
               <button
                 type="submit"
-                disabled={!inputMensaje.trim() || estaEscribiendo}
+                disabled={!inputMensaje.trim()}
                 className="w-10 h-10 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white flex items-center justify-center transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0 shadow-md shadow-indigo-500/20"
                 title="Enviar mensaje"
               >
@@ -606,13 +560,6 @@ export default function RecomendacionesPage() {
           </div>
         </div>
       </div>
-
-      {/* Modal de Configuración de IA */}
-      <ModalConfigIA
-        abierto={modalConfigAbierto}
-        onCerrar={() => setModalConfigAbierto(false)}
-        onGuardar={actualizarEstadoKey}
-      />
     </div>
   );
 }
