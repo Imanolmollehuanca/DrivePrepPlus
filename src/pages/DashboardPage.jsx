@@ -327,9 +327,9 @@ export default function DashboardPage() {
                 </div>
                 <div className="grid grid-cols-3 gap-2 text-center">
                   {[
-                    { label: t('hist_correctas'),   valor:ultimoSim.correctas,   color:'#10b981', bg:'#d1fae5' },
-                    { label: t('hist_incorrectas'),  valor:ultimoSim.incorrectas, color:'#ef4444', bg:'#fee2e2' },
-                    { label: t('hist_total'),         valor:ultimoSim.total,       color:'#6366f1', bg:'#e0e7ff' },
+                    { label: t('hist_correctas'),   valor:ultimoSim.correctas,   color:'#10b981', bg:'rgba(16, 185, 129, 0.12)' },
+                    { label: t('hist_incorrectas'),  valor:ultimoSim.incorrectas, color:'#ef4444', bg:'rgba(239, 68, 68, 0.12)' },
+                    { label: t('hist_total'),         valor:ultimoSim.total,       color:'#0284c7', bg:'rgba(2, 132, 199, 0.12)' },
                   ].map(({ label, valor, color, bg }) => (
                     <div key={label} className="py-2 px-1 rounded-xl" style={{ background: bg }}>
                       <p className="text-xl font-extrabold" style={{ fontFamily:'var(--font-display)', color }}>{valor}</p>

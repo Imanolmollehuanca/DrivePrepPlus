@@ -69,7 +69,7 @@ export function ProgressRing({ porcentaje = 0, size = 100, stroke = 8, color = '
         {/* Pista */}
         <circle
           cx={size / 2} cy={size / 2} r={radio}
-          fill="none" stroke="#e2e8f0" strokeWidth={stroke}
+          fill="none" stroke="var(--color-border)" strokeWidth={stroke}
         />
         {/* Progreso */}
         <circle
