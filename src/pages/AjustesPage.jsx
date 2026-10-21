@@ -8,11 +8,12 @@ import { useState, useEffect, useRef } from 'react';
 import {
   Settings, User, Mail, Lock, GraduationCap,
   Bell, Sun, Moon, Monitor, Globe, Shield, Check,
-  X, Eye, EyeOff, CheckCircle, AlertCircle,
+  X, Eye, EyeOff, CheckCircle, AlertCircle, Volume2,
 } from 'lucide-react';
 import { useAuth    } from '../context/AuthContext';
 import { useTema    } from '../context/TemaContext';
 import { useIdioma  } from '../context/IdiomaContext';
+import { estaSonidoHabilitado, setSonidoHabilitado, sonidoAcierto } from '../utils/audioFeedback';
 
 const KEY_AJUSTES = 'driveprep_ajustes';
 const AJUSTES_DEFECTO = {
@@ -385,6 +386,14 @@ export default function AjustesPage() {
   const [modalNombre,     setModalNombre]     = useState(false);
   const [modalEmail,      setModalEmail]      = useState(false);
   const [modalContrasena, setModalContrasena] = useState(false);
+  const [sonidoActivo,    setSonidoActivo]    = useState(estaSonidoHabilitado);
+
+  const toggleSonido = () => {
+    const nuevo = !sonidoActivo;
+    setSonidoActivo(nuevo);
+    setSonidoHabilitado(nuevo);
+    if (nuevo) sonidoAcierto();
+  };
 
   const cambiar = (campo, valor) => {
     const nuevos = { ...ajustes, [campo]: valor };
@@ -592,6 +601,25 @@ export default function AjustesPage() {
               {t('aj_idioma_nota')}
             </p>
           </div>
+        </div>
+      </SeccionAjustes>
+
+      {/* Sonido y Accesibilidad */}
+      <SeccionAjustes icono={Volume2} titulo="Efectos de Sonido" descripcion="Retroalimentación auditiva al practicar y responder preguntas" color="#0284c7" bg="rgba(2,132,199,0.1)">
+        <div className="p-4 rounded-xl border flex items-center justify-between gap-4"
+             style={{
+               borderColor: 'var(--color-border)',
+               background: 'var(--color-card)',
+             }}>
+          <div>
+            <p className="text-sm font-bold" style={{ fontFamily:'var(--font-display)', color:'var(--color-text-primary)' }}>
+              Sonidos interactivos al practicar
+            </p>
+            <p className="text-xs mt-0.5" style={{ fontFamily:'var(--font-body)', color:'var(--color-text-muted)' }}>
+              Reproduce un tono suave al marcar respuestas correctas o incorrectas.
+            </p>
+          </div>
+          <Toggle activo={sonidoActivo} color="#0284c7" onToggle={toggleSonido} />
         </div>
       </SeccionAjustes>
 

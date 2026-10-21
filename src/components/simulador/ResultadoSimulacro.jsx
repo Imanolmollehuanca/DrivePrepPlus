@@ -3,7 +3,7 @@
    Pantalla de resultados: puntaje, análisis y revisión.
    ============================================================ */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   CheckCircle2, XCircle, Clock, BarChart2,
@@ -11,17 +11,40 @@ import {
   Trophy, AlertTriangle,
 } from 'lucide-react';
 import { ProgressRing } from '../ui/UIComponents';
+import ConfettiCanvas from '../ui/ConfettiCanvas';
 import { CATEGORIAS } from '../../data/bancoPreguntasMTC';
+import { sonidoAcierto, sonidoError } from '../../utils/audioFeedback';
 
-/* ── Paleta de resultado ── */
+/* ── Paleta de resultado compatible con Dark y Light Mode ── */
 function usePaletaResultado(aprobado, puntaje) {
   if (aprobado) {
-    return { bg: '#d1fae5', text: '#065f46', borde: '#6ee7b7', icono: Trophy,          label: '¡Aprobado!',    colorAnillo: '#10b981' };
+    return {
+      bg: 'rgba(16, 185, 129, 0.15)',
+      text: '#10b981',
+      borde: 'rgba(16, 185, 129, 0.35)',
+      icono: Trophy,
+      label: '¡Aprobado para Licencia Clase A-I!',
+      colorAnillo: '#10b981'
+    };
   }
   if (puntaje >= 50) {
-    return { bg: '#fef3c7', text: '#92400e', borde: '#fde68a', icono: AlertTriangle,    label: 'Por poco...',    colorAnillo: '#f59e0b' };
+    return {
+      bg: 'rgba(245, 158, 11, 0.15)',
+      text: '#f59e0b',
+      borde: 'rgba(245, 158, 11, 0.35)',
+      icono: AlertTriangle,
+      label: 'Por poco (requiere 35/40)',
+      colorAnillo: '#f59e0b'
+    };
   }
-  return   { bg: '#fee2e2', text: '#7f1d1d', borde: '#fca5a5', icono: XCircle,          label: 'No aprobado',   colorAnillo: '#ef4444' };
+  return {
+    bg: 'rgba(239, 68, 68, 0.15)',
+    text: '#ef4444',
+    borde: 'rgba(239, 68, 68, 0.35)',
+    icono: XCircle,
+    label: 'No aprobado (mínimo 35 aciertos)',
+    colorAnillo: '#ef4444'
+  };
 }
 
 /* ── Componente de revisión de pregunta ── */
@@ -35,21 +58,21 @@ function ItemRevision({ pregunta, respuestaUsuario, numero }) {
   return (
     <div
       className="border rounded-xl overflow-hidden transition-all"
-      style={{ borderColor: correcta ? '#6ee7b7' : omitida ? '#e2e8f0' : '#fca5a5' }}
+      style={{ borderColor: correcta ? 'rgba(16, 185, 129, 0.3)' : omitida ? 'var(--color-border)' : 'rgba(239, 68, 68, 0.3)' }}
     >
       {/* Encabezado de la pregunta */}
       <button
         onClick={() => setExpandida((v) => !v)}
-        className="w-full flex items-start gap-3 p-4 text-left hover:bg-gray-50 transition-colors"
+        className="w-full flex items-start gap-3 p-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
       >
         {/* Indicador */}
         <div className="mt-0.5 shrink-0">
           {correcta ? (
-            <CheckCircle2 size={18} className="text-green-500" />
+            <CheckCircle2 size={18} className="text-emerald-500" />
           ) : omitida ? (
-            <div className="w-[18px] h-[18px] rounded-full border-2 border-gray-300" />
+            <div className="w-[18px] h-[18px] rounded-full border-2 border-slate-300 dark:border-slate-600" />
           ) : (
-            <XCircle size={18} className="text-red-500" />
+            <XCircle size={18} className="text-rose-500" />
           )}
         </div>
 
@@ -62,7 +85,7 @@ function ItemRevision({ pregunta, respuestaUsuario, numero }) {
           </p>
         </div>
 
-        <div className="shrink-0 mt-0.5 text-gray-400">
+        <div className="shrink-0 mt-0.5 text-slate-400">
           {expandida ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
         </div>
       </button>
@@ -76,9 +99,9 @@ function ItemRevision({ pregunta, respuestaUsuario, numero }) {
               const esUsuario     = opcion.id === respuestaUsuario;
               const esIncorrecta  = esUsuario && !esCorrecta;
 
-              let estilo = 'bg-gray-50 border-gray-200 text-gray-600';
-              if (esCorrecta)   estilo = 'bg-green-50 border-green-300 text-green-800';
-              if (esIncorrecta) estilo = 'bg-red-50 border-red-300 text-red-800';
+              let estilo = 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300';
+              if (esCorrecta)   estilo = 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-700 text-emerald-800 dark:text-emerald-200 font-medium';
+              if (esIncorrecta) estilo = 'bg-rose-50 dark:bg-rose-950/40 border-rose-300 dark:border-rose-700 text-rose-800 dark:text-rose-200';
 
               return (
                 <div
@@ -89,19 +112,19 @@ function ItemRevision({ pregunta, respuestaUsuario, numero }) {
                     {LETRAS[opcion.id]}
                   </span>
                   <span style={{ fontFamily: 'var(--font-body)' }}>{opcion.texto}</span>
-                  {esCorrecta && <CheckCircle2 size={15} className="ml-auto shrink-0 text-green-600 mt-0.5" />}
-                  {esIncorrecta && <XCircle size={15} className="ml-auto shrink-0 text-red-500 mt-0.5" />}
+                  {esCorrecta && <CheckCircle2 size={15} className="ml-auto shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />}
+                  {esIncorrecta && <XCircle size={15} className="ml-auto shrink-0 text-rose-500 mt-0.5" />}
                 </div>
               );
             })}
           </div>
 
           {/* Explicación */}
-          <div className="p-3 rounded-lg" style={{ background: '#f0f9ff', border: '1px solid #bae6fd' }}>
-            <p className="text-xs font-bold mb-1" style={{ fontFamily: 'var(--font-display)', color: '#0369a1' }}>
+          <div className="p-3 rounded-lg bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800/60">
+            <p className="text-xs font-bold mb-1 text-sky-700 dark:text-sky-300" style={{ fontFamily: 'var(--font-display)' }}>
               💡 Explicación
             </p>
-            <p className="text-xs leading-relaxed" style={{ fontFamily: 'var(--font-body)', color: '#0c4a6e' }}>
+            <p className="text-xs leading-relaxed text-sky-900 dark:text-sky-200" style={{ fontFamily: 'var(--font-body)' }}>
               {pregunta.explicacion}
             </p>
           </div>
@@ -116,6 +139,14 @@ export default function ResultadoSimulacro({ resultado, preguntas, respuestas, o
   const navigate   = useNavigate();
   const [tabActiva, setTabActiva] = useState('resumen'); // 'resumen' | 'categorias' | 'revision'
 
+  useEffect(() => {
+    if (resultado.aprobado) {
+      sonidoAcierto();
+    } else {
+      sonidoError();
+    }
+  }, [resultado.aprobado]);
+
   const paleta = usePaletaResultado(resultado.aprobado, resultado.puntaje);
   const IconoResultado = paleta.icono;
 
@@ -124,7 +155,9 @@ export default function ResultadoSimulacro({ resultado, preguntas, respuestas, o
   const tiempoFormato = `${String(minutosUsados).padStart(2,'0')}:${String(segundosUsados).padStart(2,'0')}`;
 
   return (
-    <div className="page-enter max-w-3xl mx-auto space-y-6">
+    <div className="page-enter max-w-3xl mx-auto space-y-6 relative">
+      {/* Confeti de celebración si aprobó el examen */}
+      {resultado.aprobado && <ConfettiCanvas />}
 
       {/* ── Tarjeta de resultado principal ── */}
       <div

@@ -154,6 +154,7 @@ body {
   color: var(--color-text-primary);
   line-height: 1.6;
   min-height: 100vh;
+  transition: background-color 200ms ease, color 150ms ease;
 }
 
 #root {
@@ -283,7 +284,7 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   border: 1px solid var(--color-border);
-  transition: box-shadow var(--transition-normal), transform var(--transition-normal);
+  transition: background-color 200ms ease, border-color 200ms ease, box-shadow var(--transition-normal), transform var(--transition-normal);
 }
 
 .card:hover {

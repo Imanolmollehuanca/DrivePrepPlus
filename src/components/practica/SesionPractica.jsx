@@ -11,6 +11,7 @@ import TipoRelacionar     from '../simulador/tipos/TipoRelacionar';
 import TipoOrdenar        from '../simulador/tipos/TipoOrdenar';
 import TipoClasificar     from '../simulador/tipos/TipoClasificar';
 import TipoCompletar      from '../simulador/tipos/TipoCompletar';
+import { sonidoClick }     from '../../utils/audioFeedback';
 
 const TIPO_META = {
   opcion_multiple: { label:'Opción múltiple',  color:'#6366f1', bg:'#eef2ff',  emoji:'🔘' },
@@ -198,7 +199,10 @@ export default function SesionPractica({
             <Comp
               pregunta={preguntaActual}
               respuesta={respActual}
-              onResponder={(val) => onResponder(preguntaActual.id, val)}
+              onResponder={(val) => {
+                sonidoClick();
+                onResponder(preguntaActual.id, val);
+              }}
             />
           )}
 

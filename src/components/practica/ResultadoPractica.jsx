@@ -2,10 +2,12 @@
    DrivePrep+ — ResultadoPractica
    Pantalla de resultados de una sesión de práctica por tema.
    ============================================================ */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { RotateCcw, Home, ChevronDown, ChevronUp, CheckCircle2, XCircle, Minus } from 'lucide-react';
 import { ProgressRing } from '../ui/UIComponents';
+import ConfettiCanvas from '../ui/ConfettiCanvas';
 import { CATEGORIAS_PRACTICA } from '../../data/bancoPractica';
+import { sonidoAcierto, sonidoError } from '../../utils/audioFeedback';
 
 const LETRAS = { a:'A', b:'B', c:'C', d:'D' };
 
@@ -16,16 +18,16 @@ function ItemRevision({ item, numero }) {
   const omitida         = item.respuestaUsuario === undefined || item.respuestaUsuario === null;
 
   const iconoEstado = esCorrectaTotal
-    ? <CheckCircle2 size={16} className="text-green-500 shrink-0" />
+    ? <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
     : omitida
-    ? <Minus size={16} className="text-gray-400 shrink-0" />
-    : <XCircle size={16} className="text-red-500 shrink-0" />;
+    ? <Minus size={16} className="text-slate-400 shrink-0" />
+    : <XCircle size={16} className="text-rose-500 shrink-0" />;
 
   return (
     <div className="border rounded-xl overflow-hidden"
-         style={{ borderColor: esCorrectaTotal ? '#6ee7b7' : omitida ? '#e2e8f0' : '#fca5a5' }}>
+         style={{ borderColor: esCorrectaTotal ? 'rgba(16,185,129,0.3)' : omitida ? 'var(--color-border)' : 'rgba(239,68,68,0.3)' }}>
       <button onClick={() => setAbierto((v) => !v)}
-              className="w-full flex items-start gap-3 p-3.5 text-left hover:bg-gray-50 transition-colors">
+              className="w-full flex items-start gap-3 p-3.5 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
         {iconoEstado}
         <div className="flex-1 min-w-0">
           <p className="text-[10px] font-semibold mb-0.5"
@@ -98,12 +100,22 @@ export default function ResultadoPractica({ resultado, onReintentar, onVolver })
   const [tab, setTab] = useState('resumen'); // 'resumen' | 'revision'
   const cat = CATEGORIAS_PRACTICA[resultado.categoriaId];
 
+  useEffect(() => {
+    if (resultado.puntaje >= 70) {
+      sonidoAcierto();
+    } else {
+      sonidoError();
+    }
+  }, [resultado.puntaje]);
+
   const colorAnillo = resultado.puntaje >= 70 ? '#10b981' : resultado.puntaje >= 50 ? '#f59e0b' : '#ef4444';
   const labelResult = resultado.puntaje >= 70 ? '¡Bien hecho!' : resultado.puntaje >= 50 ? 'Casi...' : 'Sigue practicando';
   const omitidas    = resultado.total - resultado.correctas - resultado.detalle.filter((d) => !d.correcta && d.respuestaUsuario !== undefined && d.respuestaUsuario !== null).length;
 
   return (
-    <div className="page-enter max-w-2xl mx-auto space-y-5">
+    <div className="page-enter max-w-2xl mx-auto space-y-5 relative">
+      {/* Confeti si superó el 80% en la práctica */}
+      {resultado.puntaje >= 80 && <ConfettiCanvas />}
 
       {/* ── Resultado principal ── */}
       <div className="card p-7 text-center space-y-5"

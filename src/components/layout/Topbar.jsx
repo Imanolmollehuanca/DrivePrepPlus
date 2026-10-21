@@ -70,14 +70,16 @@ export default function Topbar({ onToggleSidebar }) {
         <button
           onClick={toggleTema}
           title={esOscuro ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
-          className="p-2 rounded-xl border transition-all duration-200 hover:scale-105"
+          className="p-2 rounded-xl border transition-all duration-300 hover:scale-105 active:scale-95 flex items-center justify-center cursor-pointer"
           style={{
             borderColor: 'var(--color-border)',
             background: 'var(--color-card)',
             color: esOscuro ? '#fbbf24' : '#0284c7',
           }}
         >
-          {esOscuro ? <Sun size={18} /> : <Moon size={18} />}
+          <span className={`inline-flex transition-transform duration-300 ${esOscuro ? 'rotate-180' : 'rotate-0'}`}>
+            {esOscuro ? <Sun size={18} /> : <Moon size={18} />}
+          </span>
         </button>
 
         {/* Badge Premium */}
