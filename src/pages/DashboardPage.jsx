@@ -4,7 +4,7 @@
    Sin datos estáticos de ejemplo.
    ============================================================ */
 
-import { useState }      from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate }   from 'react-router-dom';
 import {
   LineChart, Line, XAxis, YAxis, Tooltip,
@@ -71,51 +71,60 @@ export default function DashboardPage() {
   const promedio             = metricas.promedioPuntaje      || 0;
   const mejorPuntaje         = metricas.mejorPuntaje         || 0;
 
-  /* ── Datos del gráfico de evolución ── */
-  const FILTROS_MS = { '7d': 7*864e5, '30d': 30*864e5, '90d': 90*864e5 };
-  const ahora = Date.now();
-  const umbral = ahora - (FILTROS_MS[filtroTiempo] || FILTROS_MS['7d']);
-  const entradasFiltradas = entradas.filter((e) => e.tipo === 'simulacro_completo' && e.fechaTs > umbral);
-  const evolucion = entradasFiltradas.map((e) => ({ fecha: e.fecha, puntaje: e.puntaje })).slice(0, 15);
+  /* ── Datos del gráfico de evolución memorizados ── */
+  const evolucion = useMemo(() => {
+    const FILTROS_MS = { '7d': 7*864e5, '30d': 30*864e5, '90d': 90*864e5 };
+    const ahora = Date.now();
+    const umbral = ahora - (FILTROS_MS[filtroTiempo] || FILTROS_MS['7d']);
+    const entradasFiltradas = entradas.filter((e) => e.tipo === 'simulacro_completo' && e.fechaTs > umbral);
+    return entradasFiltradas.map((e) => ({ fecha: e.fecha, puntaje: e.puntaje })).slice(0, 15);
+  }, [entradas, filtroTiempo]);
 
   /* ── Último simulacro ── */
-  const ultimoSim = entradas.find((e) => e.tipo === 'simulacro_completo') || null;
+  const ultimoSim = useMemo(() => {
+    return entradas.find((e) => e.tipo === 'simulacro_completo') || null;
+  }, [entradas]);
+
   const badgeResultado = ultimoSim
     ? ultimoSim.aprobado
       ? { texto: t('hist_aprobado'),    clase:'badge-success' }
       : { texto: t('hist_desaprobado'), clase:'badge-danger'  }
     : null;
 
-/* ── Recomendación ── */
-  const categoriasMasErrores = entradas
-    .filter((e) => e.porCategoria?.length)
-    .flatMap((e) => e.porCategoria)
-    .reduce((acc, c) => {
-      if (!acc[c.label]) acc[c.label] = { nombre:c.label, errores:0 };
-      acc[c.label].errores += (c.total - c.correctas);
-      return acc;
-    }, {});
-  const peorCategoria = Object.values(categoriasMasErrores).sort((a, b) => b.errores - a.errores)[0];
-  const recomendacion = peorCategoria ? { tema: peorCategoria.nombre, mensaje: 'Practica esta categoría para mejorar tu puntaje.' } : { tema: null, mensaje: null };
+  /* ── Recomendación memorizada ── */
+  const recomendacion = useMemo(() => {
+    const categoriasMasErrores = entradas
+      .filter((e) => e.porCategoria?.length)
+      .flatMap((e) => e.porCategoria)
+      .reduce((acc, c) => {
+        if (!acc[c.label]) acc[c.label] = { nombre:c.label, errores:0 };
+        acc[c.label].errores += (c.total - c.correctas);
+        return acc;
+      }, {});
+    const peorCategoria = Object.values(categoriasMasErrores).sort((a, b) => b.errores - a.errores)[0];
+    return peorCategoria ? { tema: peorCategoria.nombre, mensaje: 'Practica esta categoría para mejorar tu puntaje.' } : { tema: null, mensaje: null };
+  }, [entradas]);
 
-  /* ── Categorías con más errores (para la barra) ── */
-  const todasPorCategoria = entradas
-    .filter((e) => e.porCategoria?.length)
-    .flatMap((e) => e.porCategoria)
-    .reduce((acc, c) => {
-      if (!acc[c.label]) acc[c.label] = { nombre:c.label, correctas:0, total:0 };
-      acc[c.label].correctas += c.correctas;
-      acc[c.label].total     += c.total;
-      return acc;
-    }, {});
-  const categorias = Object.values(todasPorCategoria)
-    .map((c) => ({ nombre: c.nombre, porcentajeAcierto: c.total ? Math.round((c.correctas/c.total)*100) : 0 }))
-    .sort((a, b) => a.porcentajeAcierto - b.porcentajeAcierto)
-    .slice(0, 4)
-    .map((c) => ({
-      ...c,
-      color: c.porcentajeAcierto < 50 ? '#ef4444' : c.porcentajeAcierto < 70 ? '#f59e0b' : '#10b981',
-    }));
+  /* ── Categorías con más errores memorizadas ── */
+  const categorias = useMemo(() => {
+    const todasPorCategoria = entradas
+      .filter((e) => e.porCategoria?.length)
+      .flatMap((e) => e.porCategoria)
+      .reduce((acc, c) => {
+        if (!acc[c.label]) acc[c.label] = { nombre:c.label, correctas:0, total:0 };
+        acc[c.label].correctas += c.correctas;
+        acc[c.label].total     += c.total;
+        return acc;
+      }, {});
+    return Object.values(todasPorCategoria)
+      .map((c) => ({ nombre: c.nombre, porcentajeAcierto: c.total ? Math.round((c.correctas/c.total)*100) : 0 }))
+      .sort((a, b) => a.porcentajeAcierto - b.porcentajeAcierto)
+      .slice(0, 4)
+      .map((c) => ({
+        ...c,
+        color: c.porcentajeAcierto < 50 ? '#ef4444' : c.porcentajeAcierto < 70 ? '#f59e0b' : '#10b981',
+      }));
+  }, [entradas]);
 
   const FILTROS_TIEMPO_LOCAL = [
     { valor:'7d',  label:'Últimos 7 días'  },

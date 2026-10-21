@@ -59,6 +59,18 @@ export function generarPreguntaPractica(categoriaFiltro = null, temaKeyword = ''
 
 const STOPWORDS = new Set(['que', 'qué', 'significa', 'significan', 'es', 'son', 'la', 'las', 'el', 'los', 'un', 'una', 'unos', 'unas', 'de', 'del', 'en', 'para', 'por', 'con', 'cual', 'cuál', 'como', 'cómo', 'y', 'o', 'al', 'se', 'su', 'sus', 'lo', 'los']);
 
+/* ── Pre-índice optimizado en memoria para búsqueda de patrones sin re-normalizaciones ── */
+const INDICE_CONOCIMIENTO = BASE_CONOCIMIENTOS_MTC.map((item) => ({
+  item,
+  patrones: item.patrones.map((patron) => {
+    const patronNorm = normalizar(patron);
+    return {
+      patronNorm,
+      tokensPatron: patronNorm.split(' ').filter((t) => t.length > 1 && !STOPWORDS.has(t)),
+    };
+  }),
+}));
+
 /* ── Buscador de coincidencia en la Base de Conocimientos ── */
 function buscarEnBaseConocimientos(textoNormalizado, ultimoTema) {
   let mejorItem = null;
@@ -66,10 +78,9 @@ function buscarEnBaseConocimientos(textoNormalizado, ultimoTema) {
 
   const tokensUsuario = textoNormalizado.split(' ').filter(t => t.length > 1 && !STOPWORDS.has(t));
 
-  for (const item of BASE_CONOCIMIENTOS_MTC) {
-    for (const patron of item.patrones) {
-      const patronNorm = normalizar(patron);
-
+  for (const entrada of INDICE_CONOCIMIENTO) {
+    const item = entrada.item;
+    for (const { patronNorm, tokensPatron } of entrada.patrones) {
       // Coincidencia exacta de frase
       if (textoNormalizado === patronNorm) {
         return { item, puntaje: 200 };
@@ -94,7 +105,6 @@ function buscarEnBaseConocimientos(textoNormalizado, ultimoTema) {
       }
 
       // Coincidencia por tokens significativos ponderados (sin stopwords)
-      const tokensPatron = patronNorm.split(' ').filter(t => t.length > 1 && !STOPWORDS.has(t));
       if (tokensPatron.length > 0 && tokensUsuario.length > 0) {
         let aciertos = 0;
         for (const t of tokensUsuario) {
